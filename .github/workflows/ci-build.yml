@@ -15,25 +15,30 @@ jobs:
         node-version: [20]
 
     steps:
+      # 1️⃣ 拉取代码
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ 安装 Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      # 3️⃣ 安装依赖
       - name: Install dependencies
         run: npm install
 
+      # 4️⃣ 构建项目
       - name: Build project
         run: npm run build
 
+      # 5️⃣ 测试
       - name: Run tests
         run: npm test
 
-      # 上传 dist 作为 artifact（同一 workflow 内可被其他 job 使用）
+      # 6️⃣ 上传 dist 作为 artifact（同一 workflow 内可共享）
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
         with:
