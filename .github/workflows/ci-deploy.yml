@@ -4,38 +4,44 @@ on:
   push:
     branches: [ "main" ]
 
+# 给 deploy-pages@v4 所需权限
 permissions:
   contents: read
   pages: write
-  id-token: write   # 必须，否则 deploy-pages@v4 会报错
-
+  id-token: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ 拉取代码
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ 安装 Node
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3️⃣ 安装依赖（用 npm install 避免没有 lock 文件报错）
       - name: Install dependencies
         run: npm install
 
+      # 4️⃣ 构建 Vite 项目
       - name: Build project
         run: npm run build
 
-      # 配置 GitHub Pages
+      # 5️⃣ 配置 Pages
       - uses: actions/configure-pages@v5
 
+      # 6️⃣ 上传 dist 目录
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./dist
+          path: ./dist   # 确保和 vite.config.ts 输出目录一致
 
+      # 7️⃣ 部署
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
