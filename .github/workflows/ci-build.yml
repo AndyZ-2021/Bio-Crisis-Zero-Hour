@@ -2,9 +2,9 @@ name: CI Build
 
 on:
   pull_request:
-    branches: [ "main" ]   # 任何分支 PR 到 main
+    branches: [ "main" ]
   push:
-    branches: [ "main" ]   # 直接 push main 时也构建
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
         node-version: [20]
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -33,9 +33,9 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # 上传 dist 作为 artifact，PR 内多个 job 可以共享
+      # 上传 dist 作为 artifact（同一 workflow 内可被其他 job 使用）
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dist-artifact
           path: ./dist
